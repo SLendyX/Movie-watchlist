@@ -111,7 +111,7 @@ async function getMovies(e){
 
                 document.body.appendChild(confirmDiv)
 
-                setTimeout(() => document.body.removeChild(confirmDiv), 1499)
+                setTimeout(() => document.body.removeChild(confirmDiv), 1450)
 
 
             })
