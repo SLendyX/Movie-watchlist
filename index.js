@@ -2,6 +2,7 @@ const searchInput = document.getElementById("search-bar")
 const placeholder = document.getElementById("placeholder")
 export const mainBody = document.getElementById("page-body")
 const form = document.getElementById("search-form")
+const loadingModal = document.getElementById("loading-modal")
 
 
 export function updateMainBody(data, icon="+", label="Watchlist"){
@@ -39,6 +40,11 @@ export function updateMainBody(data, icon="+", label="Watchlist"){
             `
 }
 
+function toggleModal(){
+    loadingModal.classList.toggle("hidden")
+    loadingModal.classList.toggle("flex")
+}
+
 
 
 if(form)
@@ -48,6 +54,8 @@ if(form)
 
 async function getMovies(e){
     e.preventDefault()    
+
+
     const movieData = searchInput.value
 
     if(mainBody.classList.contains("empty")){ 
@@ -57,6 +65,8 @@ async function getMovies(e){
 
     mainBody.innerHTML = ""
 
+
+    toggleModal()
     try{
         const response = await fetch(`http://www.omdbapi.com/?apikey=81ea48ce&s=${movieData}`)
         const data = await response.json()
@@ -88,15 +98,29 @@ async function getMovies(e){
                     
                     if(!array.includes(movieArray[index].imdbID)){
                         array.push(movieArray[index].imdbID)
-                        console.log(array)
+                        // console.log(array)
                         localStorage.setItem("movieArray", JSON.stringify(array))
                     }
                 }
                 else
                 localStorage.setItem("movieArray", JSON.stringify([movieArray[index].imdbID]))
+                
+                const confirmDiv = document.createElement("div")
+                confirmDiv.innerHTML = `<span class="confirm-message">Added to Watchlist</span>`
+                confirmDiv.classList.add("message-container")
+
+                document.body.appendChild(confirmDiv)
+
+                setTimeout(() => document.body.removeChild(confirmDiv), 1499)
+
+
             })
         })
+        toggleModal()
+
     }catch(e){
+        toggleModal()
+
         mainBody.classList.toggle("empty")
         mainBody.classList.toggle("full")
 
@@ -107,7 +131,7 @@ async function getMovies(e){
     }
 }
 
-function showMore(e){
+export function showMore(e){
     e.target.classList.toggle("hidden")
     e.target.nextElementSibling.classList.toggle("hidden");
 }
@@ -122,26 +146,3 @@ function formatLongText(text){
 
     return `${firstPart} <button class="readmore-btn">... Read more</button><span class="hidden">${remainingPart}</span>`;
 }
-
-
-
-
-// `
-// <div>
-//     <img src="${poster}">
-    
-//     <div>
-//         <div>
-//             <h3>${Title}</h3>
-//             <img>star icon</img>
-//         </div>
-//         <div>
-//             <span>${Runtime}</span>
-//             <span>${Genre}</span>
-//             <button id="watchlist-btn">+</buton>
-//             <label for="watchlist-btn">Watchlist</label>
-//         </div>
-//         <p>${Plot}</p>
-//     </div>
-// </div>
-// `

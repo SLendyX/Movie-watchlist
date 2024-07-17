@@ -1,4 +1,4 @@
-import { updateMainBody, mainBody } from "./index.js"
+import { updateMainBody, mainBody, showMore } from "./index.js"
 
 
 let movieArray = JSON.parse(localStorage.getItem("movieArray"))
@@ -12,10 +12,15 @@ function genearteWatchlist(movieArray){
         for(const movie of movieArray){
             updateMainBody(JSON.parse(localStorage.getItem(movie)), "⎯", "Remove")
         }
+
+        document.querySelectorAll(".readmore-btn").forEach(btn => {
+            btn.addEventListener("click", showMore);
+        });
     
         document.querySelectorAll(".watchlist-btn").forEach(btn => {
             btn.addEventListener("click", removeFromWatchList)
         })
+
     }
 
 
@@ -32,6 +37,14 @@ function removeFromWatchList(e){
     localStorage.removeItem(id)
     mainBody.removeChild(document.getElementById(id))
     isBodyEmpty(movieArray)
+
+    const confirmDiv = document.createElement("div")
+    confirmDiv.innerHTML = `<span class="confirm-message">Removed from Watchlist</span>`
+    confirmDiv.classList.add("message-container")
+
+    document.body.appendChild(confirmDiv)
+
+    setTimeout(() => document.body.removeChild(confirmDiv), 1499)
 }
 
 
