@@ -68,7 +68,7 @@ async function getMovies(e){
 
     toggleModal()
     try{
-        const response = await fetch(`http://www.omdbapi.com/?apikey=81ea48ce&s=${movieData}`)
+        const response = await fetch(`https://www.omdbapi.com/?apikey=81ea48ce&s=${movieData}`)
         const data = await response.json()
 
         let movieArray= [] 
@@ -76,7 +76,7 @@ async function getMovies(e){
         for (const movie of data.Search) {
             
 
-            const response = await fetch(`http://www.omdbapi.com/?apikey=81ea48ce&i=${movie.imdbID}&plot=short`);
+            const response = await fetch(`https://www.omdbapi.com/?apikey=81ea48ce&i=${movie.imdbID}&plot=short`);
             const data = await response.json();
             
             movieArray.push(data)
