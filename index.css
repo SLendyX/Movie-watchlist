@@ -58,9 +58,17 @@ a{
     color:inherit;
 }
 
-a:hover{
+a:hover, a > label:hover{
     color:#EA8410;
     text-decoration: underline;
+}
+
+a:hover ~ label{
+    color:#EA8410;
+}
+
+a > .watchlist-btn:hover{
+    background-color:#EA8410;
 }
 
 
@@ -220,10 +228,16 @@ main{
     align-self: center;
 }
 
-.watchlist-btn > a:hover{
+/* .watchlist-btn > a:hover{
     color: #B4B1B1;
     text-decoration: none;
+} */
+
+a > label{
+    cursor: pointer;
 }
+
+
 
 .empty-message{
     color: #363636;
@@ -232,7 +246,6 @@ main{
 }
 
 .watchlist-btn:hover{
-    /* background-color: #1A1919; */
     background-color: #B4B1B1;
 }
 
@@ -244,6 +257,13 @@ main{
     cursor: pointer;
 }
 
+.watchlist-link{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:0.5em;
+}
+
 .genre{
     justify-self: center;
     text-align: center;
@@ -252,13 +272,6 @@ main{
 .watchlist-btn-container{
     display: flex;
     justify-self: end;
-    gap:0.5em;
-}
-
-.add-movies-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
     gap:0.5em;
 }
 
