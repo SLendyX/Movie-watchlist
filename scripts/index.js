@@ -5,39 +5,85 @@ const form = document.getElementById("search-form")
 const loadingModal = document.getElementById("loading-modal")
 
 
-export function updateMainBody(data, icon="+", label="Watchlist"){
+export function showMore(e){
+    e.target.classList.toggle("hidden")
+    e.target.nextElementSibling.classList.toggle("hidden");
+}
+
+
+export function updateMainBody(data, icon = "+", label = "Watchlist") {
     let posterAlt = "Poster ";
 
-            if (data.Poster === "N/A") {
-                posterAlt += data.Poster;
-                data.Poster = "";
-            }
+    if (data.Poster === "N/A") {
+        posterAlt += data.Poster;
+        data.Poster = "";
+    }
 
-            const plotText = formatLongText(data.Plot);
+    const plotText = formatLongText(data.Plot, data.imdbID);
 
-            mainBody.innerHTML += `
-                <div class="movie-container" id="${data.imdbID}">
-                    <img src="${data.Poster}" class="poster" alt="${posterAlt}">
-                    <div>
-                        <div class="movie-header">
-                            <h3>${data.Title}</h3>
-                            <div>
-                                <img class="star-icon" src="images/star.svg"></img>
-                                <span>${data.imdbRating}</span>
-                            </div>
-                        </div>
-                        <div class="movie-details">
-                            <span>${data.Runtime}</span>
-                            <span>${data.Genre}</span>
-                            <div class="watchlist-btn-container">
-                                <button id="watchlist-btn-${data.imdbID}" class="watchlist-btn" data-imdbId="${data.imdbID}">${icon}</button>
-                                <label class="watchlist-label for="watchlist-btn">${label}</label>
-                            </div>
-                        </div>
-                        <p class="plot">${plotText}</p>
-                    </div>
+    // Create the container for the movie
+    const movieContainer = document.createElement("div");
+    movieContainer.classList.add("movie-container");
+    movieContainer.id = data.imdbID;
+
+    // Set the inner HTML for the movie container
+    movieContainer.innerHTML = `
+        <img src="${data.Poster}" class="poster" alt="${posterAlt}">
+        <div class="movie-content">
+            <div class="movie-header">
+                <h3>${data.Title}</h3>
+                <div class="rating">
+                    <img class="star-icon" src="images/star.svg"></img>
+                    <span>${data.imdbRating}</span>
                 </div>
-            `
+            </div>
+            <div class="movie-details">
+                <span>${data.Runtime}</span>
+                <span class="genre">${data.Genre}</span>
+                <div class="watchlist-btn-container">
+                    <button id="watchlist-btn-${data.imdbID}" class="watchlist-btn" data-imdbId="${data.imdbID}">${icon}</button>
+                    <label class="watchlist-label" for="watchlist-btn-${data.imdbID}">${label}</label>
+                </div>
+            </div>
+            <p class="plot">${plotText}</p>
+        </div>
+    `;
+
+    // Append the movie container to the main body
+    mainBody.appendChild(movieContainer);
+
+    // Add the event listener to the watchlist button
+    const watchlistBtn = movieContainer.querySelector(`#watchlist-btn-${data.imdbID}`);
+    watchlistBtn.addEventListener("click", (e) => {
+        localStorage.setItem(data.imdbID, JSON.stringify(data));
+
+        if (localStorage.getItem("movieArray")) {
+            let array = JSON.parse(localStorage.getItem("movieArray"));
+
+            if (!array.includes(data.imdbID)) {
+                array.push(data.imdbID);
+                localStorage.setItem("movieArray", JSON.stringify(array));
+            }
+        } else {
+            localStorage.setItem("movieArray", JSON.stringify([data.imdbID]));
+        }
+
+        const confirmDiv = document.createElement("div");
+        confirmDiv.innerHTML = `<span class="confirm-message">Added to Watchlist</span>`;
+        confirmDiv.classList.add("message-container");
+
+        document.body.appendChild(confirmDiv);
+
+        setTimeout(() => document.body.removeChild(confirmDiv), 1450);
+    });
+
+    const showMoreBtn = movieContainer.querySelector(`#readmore-btn-${data.imdbID}`)
+    
+    if(showMoreBtn)
+        showMoreBtn.addEventListener("click", (e)=>{
+            e.target.classList.toggle("hidden")
+            e.target.nextElementSibling.classList.toggle("hidden");
+        })
 }
 
 function toggleModal(){
@@ -76,7 +122,7 @@ async function getMovies(e){
         for (const movie of data.Search) {
             
 
-            const response = await fetch(`https://www.omdbapi.com/?apikey=81ea48ce&i=${movie.imdbID}&plot=short`);
+            const response = await fetch(`https://www.omdbapi.com/?apikey=81ea48ce&i=${movie.imdbID}`);
             const data = await response.json();
             
             movieArray.push(data)
@@ -84,40 +130,11 @@ async function getMovies(e){
             updateMainBody(data)
         }
 
-        document.querySelectorAll(".readmore-btn").forEach(btn => {
-            btn.addEventListener("click", showMore);
-        });
+        // document.querySelectorAll(".readmore-btn").forEach(btn => {
+        //     btn.addEventListener("click", showMore);
+        // });
 
-        document.querySelectorAll(".watchlist-btn").forEach((btn, index) =>{
-            btn.addEventListener("click", e=>{
-                localStorage.setItem(movieArray[index].imdbID, JSON.stringify(movieArray[index]))
-                
-                if(localStorage.getItem("movieArray")){
-                    let array = JSON.parse(localStorage.getItem("movieArray"))
-                    
-                    
-                    if(!array.includes(movieArray[index].imdbID)){
-                        array.push(movieArray[index].imdbID)
-                        // console.log(array)
-                        localStorage.setItem("movieArray", JSON.stringify(array))
-                    }
-                }
-                else
-                localStorage.setItem("movieArray", JSON.stringify([movieArray[index].imdbID]))
-                
-                const confirmDiv = document.createElement("div")
-                confirmDiv.innerHTML = `<span class="confirm-message">Added to Watchlist</span>`
-                confirmDiv.classList.add("message-container")
-
-                document.body.appendChild(confirmDiv)
-
-                setTimeout(() => document.body.removeChild(confirmDiv), 1450)
-
-
-            })
-        })
         toggleModal()
-
     }catch(e){
         toggleModal()
 
@@ -131,18 +148,13 @@ async function getMovies(e){
     }
 }
 
-export function showMore(e){
-    e.target.classList.toggle("hidden")
-    e.target.nextElementSibling.classList.toggle("hidden");
-}
 
-
-function formatLongText(text){
+function formatLongText(text, id){
     let words = text.split(" ");
     if (words.length <= 25) return text;
 
     let firstPart = words.slice(0, 25).join(" ");
     let remainingPart = words.slice(25).join(" ");
 
-    return `${firstPart} <button class="readmore-btn">... Read more</button><span class="hidden">${remainingPart}</span>`;
+    return `${firstPart} <button id="readmore-btn-${id}" class="readmore-btn">... Read more</button><span class="hidden">${remainingPart}</span>`;
 }
