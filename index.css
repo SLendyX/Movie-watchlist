@@ -240,6 +240,10 @@ main{
     user-select: none;
 }
 
+.watchlist-label{
+    cursor: pointer;
+}
+
 .genre{
     justify-self: center;
     text-align: center;
