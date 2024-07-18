@@ -59,7 +59,7 @@ function toggleBody(isHidden = false){
 
                         <a  href="index.html" class="watchlist-link empty-message">
                             <button id="forward-search" class="watchlist-btn">
-                                <img src="/images/add-icon.svg" data-imdbId="${data.imdbID}">
+                                <img src="/images/add-icon.svg">
                             </button>
                             <label for="forward-search">Let's add some movies</label>
                         </a>
