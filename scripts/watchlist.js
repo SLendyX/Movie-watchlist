@@ -53,13 +53,19 @@ function toggleBody(isHidden = false){
     mainBody.classList.toggle('full')    
     mainBody.innerHTML = 
     `
-        <div id="placeholder" class="placeholder">
-            <p>Your watchlist is looking a little empty...</p>
-            <div>
-                    <button class="watchlist-btn"><a href="index.html"><img src="/images/add-icon.svg"></a></button>
-                    <span class="empty-message">Let's add some movies</span>
+                    <div id="placeholder" class="placeholder">
+                <p>Your watchlist is looking a little empty...</p>
+                <div>
+
+                        <a  href="index.html" class="watchlist-link empty-message">
+                            <button id="forward-search" class="watchlist-btn">
+                                <img src="/images/add-icon.svg" data-imdbId="${data.imdbID}">
+                            </button>
+                            <label for="forward-search">Let's add some movies</label>
+                        </a>
+
                 </div>  
-        </div>
+            </div>
     `
     if(!isHidden)
         document.getElementById("placeholder").classList.toggle("hidden")
