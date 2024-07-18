@@ -10,12 +10,12 @@ function genearteWatchlist(movieArray){
         toggleBody()
 
         for(const movie of movieArray){
-            updateMainBody(JSON.parse(localStorage.getItem(movie)), "⎯", "Remove")
+            updateMainBody(JSON.parse(localStorage.getItem(movie)), "/images/remove-icon.svg", "Remove")
         }
 
-        document.querySelectorAll(".readmore-btn").forEach(btn => {
-            btn.addEventListener("click", showMore);
-        });
+        // document.querySelectorAll(".readmore-btn").forEach(btn => {
+        //     btn.addEventListener("click", showMore);
+        // });
     
         document.querySelectorAll(".watchlist-btn").forEach(btn => {
             btn.addEventListener("click", removeFromWatchList)
@@ -56,7 +56,7 @@ function toggleBody(isHidden = false){
         <div id="placeholder" class="placeholder">
             <p>Your watchlist is looking a little empty...</p>
             <div>
-                    <button class="watchlist-btn"><a href="index.html">+</a></button>
+                    <button class="watchlist-btn"><a href="index.html"><img src="/images/add-icon.svg"></a></button>
                     <span class="empty-message">Let's add some movies</span>
                 </div>  
         </div>
@@ -67,8 +67,6 @@ function toggleBody(isHidden = false){
 }
 
 function isBodyEmpty(array){
-    if(array.length === 0){
-        console.log(array)
-        toggleBody(true)
-    }
+    if(array.length === 0)
+        toggleBody(true)  
 }

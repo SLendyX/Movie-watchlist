@@ -11,7 +11,7 @@ export function showMore(e){
 }
 
 
-export function updateMainBody(data, icon = "+", label = "Watchlist") {
+export function updateMainBody(data, icon = "/images/add-icon.svg", label = "Watchlist") {
     let posterAlt = "Poster ";
 
     if (data.Poster === "N/A") {
@@ -41,7 +41,7 @@ export function updateMainBody(data, icon = "+", label = "Watchlist") {
                 <span>${data.Runtime}</span>
                 <span class="genre">${data.Genre}</span>
                 <div class="watchlist-btn-container">
-                    <button id="watchlist-btn-${data.imdbID}" class="watchlist-btn" data-imdbId="${data.imdbID}">${icon}</button>
+                    <button id="watchlist-btn-${data.imdbID}" class="watchlist-btn" data-imdbId="${data.imdbID}"><img src="${icon}" data-imdbId="${data.imdbID}"></button>
                     <label class="watchlist-label" for="watchlist-btn-${data.imdbID}">${label}</label>
                 </div>
             </div>
@@ -52,30 +52,32 @@ export function updateMainBody(data, icon = "+", label = "Watchlist") {
     // Append the movie container to the main body
     mainBody.appendChild(movieContainer);
 
-    // Add the event listener to the watchlist button
-    const watchlistBtn = movieContainer.querySelector(`#watchlist-btn-${data.imdbID}`);
-    watchlistBtn.addEventListener("click", (e) => {
-        localStorage.setItem(data.imdbID, JSON.stringify(data));
+    if(label==="Watchlist"){
+        // Add the event listener to the watchlist button
+        const watchlistBtn = movieContainer.querySelector(`#watchlist-btn-${data.imdbID}`);
+        watchlistBtn.addEventListener("click", (e) => {
+            localStorage.setItem(data.imdbID, JSON.stringify(data));
 
-        if (localStorage.getItem("movieArray")) {
-            let array = JSON.parse(localStorage.getItem("movieArray"));
+            if (localStorage.getItem("movieArray")) {
+                let array = JSON.parse(localStorage.getItem("movieArray"));
 
-            if (!array.includes(data.imdbID)) {
-                array.push(data.imdbID);
-                localStorage.setItem("movieArray", JSON.stringify(array));
+                if (!array.includes(data.imdbID)) {
+                    array.push(data.imdbID);
+                    localStorage.setItem("movieArray", JSON.stringify(array));
+                }
+            } else {
+                localStorage.setItem("movieArray", JSON.stringify([data.imdbID]));
             }
-        } else {
-            localStorage.setItem("movieArray", JSON.stringify([data.imdbID]));
-        }
 
-        const confirmDiv = document.createElement("div");
-        confirmDiv.innerHTML = `<span class="confirm-message">Added to Watchlist</span>`;
-        confirmDiv.classList.add("message-container");
+            const confirmDiv = document.createElement("div");
+            confirmDiv.innerHTML = `<span class="confirm-message">Added to Watchlist</span>`;
+            confirmDiv.classList.add("message-container");
 
-        document.body.appendChild(confirmDiv);
+            document.body.appendChild(confirmDiv);
 
-        setTimeout(() => document.body.removeChild(confirmDiv), 1450);
-    });
+            setTimeout(() => document.body.removeChild(confirmDiv), 1450);
+        });
+    }
 
     const showMoreBtn = movieContainer.querySelector(`#readmore-btn-${data.imdbID}`)
     

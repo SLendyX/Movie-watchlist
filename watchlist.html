@@ -24,8 +24,12 @@
         <main id="page-body" class="empty inverse-flex">
             <div id="placeholder" class="placeholder">
                 <p>Your watchlist is looking a little empty...</p>
-                <div>
-                    <button class="watchlist-btn"><a href="index.html">+</a></button>
+                <div class="add-movies-container">
+                    <button class="watchlist-btn">
+                        <a href="index.html">
+                            <img src="/images/add-icon.svg" data-imdbId="${data.imdbID}">
+                        </a>
+                    </button>
                     <span class="empty-message">Let's add some movies</span>
                 </div>  
             </div>

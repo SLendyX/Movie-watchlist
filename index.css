@@ -204,20 +204,20 @@ main{
     grid-template-columns: auto 1fr minmax(90px, auto);
     margin-bottom: 0.75em;
     gap:0.25em;
+    align-items: center;
 }
 
 .watchlist-btn{
     width: 16px;
+    height: 16px;
     appearance: none;
     border-radius:50%;
     border:none;
     padding-block: 0;
     padding-inline: 0;
-    background-color: #111827;
-    color:white;
-    font-weight: 700;
-    font-size: 14px;
+    background-color: #FFFFFF;
     cursor:pointer;
+    align-self: center;
 }
 
 .watchlist-btn > a:hover{
@@ -232,8 +232,8 @@ main{
 }
 
 .watchlist-btn:hover{
-    background-color: #1A1919;
-    color: #B4B1B1;
+    /* background-color: #1A1919; */
+    background-color: #B4B1B1;
 }
 
 .watchlist-label, .watchlist-btn-container{
@@ -250,7 +250,16 @@ main{
 }
 
 .watchlist-btn-container{
+    display: flex;
     justify-self: end;
+    gap:0.5em;
+}
+
+.add-movies-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:0.5em;
 }
 
 .plot, .plot > span{
